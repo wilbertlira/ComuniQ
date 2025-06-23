@@ -42,8 +42,13 @@ while ($row = $resNovasMsg->fetch_assoc()) {
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conversas Privadas</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -52,6 +57,7 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       display: flex;
       justify-content: center;
     }
+
     .container {
       width: 100%;
       max-width: 450px;
@@ -60,6 +66,7 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       display: flex;
       flex-direction: column;
     }
+
     h2 {
       background: #202c33;
       padding: 15px;
@@ -69,6 +76,7 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       color: #dcf8c6;
       border-bottom: 1px solid #1f2b30;
     }
+
     ul {
       list-style: none;
       padding: 0;
@@ -77,6 +85,7 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       overflow-y: auto;
       background: #0b141a;
     }
+
     li {
       padding: 15px 20px;
       border-bottom: 1px solid #1f2b30;
@@ -85,17 +94,21 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       gap: 12px;
       cursor: pointer;
     }
+
     li:hover {
       background: #2a3942;
     }
+
     li::before {
       content: "👤";
       font-size: 1.2rem;
     }
+
     li.nova-mensagem::before {
       content: "📩";
       color: #25d366;
     }
+
     a {
       text-decoration: none;
       color: #dcf8c6;
@@ -103,24 +116,46 @@ while ($row = $resNovasMsg->fetch_assoc()) {
       font-size: 1rem;
       flex-grow: 1;
     }
+
     a:hover {
       text-decoration: underline;
     }
+
     .footer {
       text-align: center;
       padding: 15px;
       background: #202c33;
     }
+
     .footer a {
       color: #25d366;
       font-weight: bold;
       text-decoration: none;
     }
+
     .footer a:hover {
       text-decoration: underline;
     }
+
+    /* Responsividade adicional se necessário */
+    @media (max-width: 400px) {
+      li {
+        padding: 12px 15px;
+        gap: 10px;
+      }
+
+      a {
+        font-size: 0.95rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+        padding: 12px;
+      }
+    }
   </style>
 </head>
+
 <body>
 <div class="container">
   <h2>💬 Conversas Privadas</h2>

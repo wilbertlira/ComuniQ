@@ -214,6 +214,7 @@ $notificacao = $resNot->fetch_assoc();
 
   <?php if ($isAdmin): ?>
     <button class="criar-topico" onclick="location.href='criar_topico.php'">+ Criar Tópico</button>
+    <button class="criar-topico" onclick="location.href='admin_avisos.php'">+ Criar avisos</button>
   <?php endif; ?>
 
   <div class="topico-lista">

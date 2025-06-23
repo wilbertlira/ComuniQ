@@ -8,7 +8,7 @@
   <input type="password" name="senha" placeholder="Senha" required>
   <button type="submit">Entrar</button>
 </form>
-<p>Ainda não tem conta? <a href="cadastro.php">Cadastrar</a></p>
+
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

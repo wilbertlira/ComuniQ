@@ -75,9 +75,13 @@ $mensagens = $stmtMsg->get_result();
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Chat com <?= htmlspecialchars($nomePara) ?></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -86,6 +90,7 @@ $mensagens = $stmtMsg->get_result();
       display: flex;
       justify-content: center;
     }
+
     .container {
       width: 100%;
       max-width: 450px;
@@ -94,6 +99,7 @@ $mensagens = $stmtMsg->get_result();
       flex-direction: column;
       background: #111b21;
     }
+
     header {
       background: #202c33;
       padding: 15px;
@@ -103,35 +109,44 @@ $mensagens = $stmtMsg->get_result();
       justify-content: space-between;
       align-items: center;
     }
+
     .chat-box {
       flex-grow: 1;
       padding: 15px;
       overflow-y: auto;
       background: #0b141a;
+      display: flex;
+      flex-direction: column;
     }
+
     .mensagem {
       margin-bottom: 10px;
       padding: 10px 15px;
       border-radius: 10px;
-      max-width: 70%;
+      max-width: 80%;
       word-wrap: break-word;
     }
+
     .mensagem.remetente {
       background: #25d366;
       color: #000;
       margin-left: auto;
       text-align: right;
     }
+
     .mensagem.destinatario {
       background: #2a3942;
       text-align: left;
     }
+
     form {
       background: #202c33;
       padding: 10px;
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
+
     textarea {
       flex-grow: 1;
       resize: none;
@@ -142,7 +157,10 @@ $mensagens = $stmtMsg->get_result();
       font-size: 1rem;
       background: #292929;
       color: #fff;
+      width: 100%;
+      min-height: 50px;
     }
+
     button {
       background: #25d366;
       border: none;
@@ -150,15 +168,33 @@ $mensagens = $stmtMsg->get_result();
       color: #000;
       font-weight: bold;
       font-size: 1rem;
-      padding: 0 15px;
+      padding: 10px 20px;
       cursor: pointer;
       transition: background 0.3s ease;
+      width: 100%;
     }
+
     button:hover {
       background: #128c34;
     }
+
+    /* Melhorias para telas maiores */
+    @media (min-width: 600px) {
+      form {
+        flex-wrap: nowrap;
+      }
+
+      textarea {
+        width: auto;
+      }
+
+      button {
+        width: auto;
+      }
+    }
   </style>
 </head>
+
 <body>
 <div class="container">
   <header>
@@ -166,15 +202,10 @@ $mensagens = $stmtMsg->get_result();
     <a href="usuarios.php" style="color:#25d366; text-decoration:none;">← Voltar</a>
   </header>
 
-  <div class="chat-box" id="chat">
-    <?php while ($m = $mensagens->fetch_assoc()): ?>
-      <div class="mensagem <?= $m['de_id'] === $meuId ? 'remetente' : 'destinatario' ?>">
-        <?= nl2br(htmlspecialchars($m['mensagem'])) ?>
-        <br>
-        <small style="font-size: 0.7rem; color: #999;"><?= $m['data'] ?></small>
-      </div>
-    <?php endwhile; ?>
-  </div>
+<div class="chat-box" id="chat-box">
+  <!-- As mensagens serão carregadas automaticamente via JavaScript -->
+</div>
+
 
   <form method="post">
     <textarea name="mensagem" rows="3" placeholder="Digite sua mensagem..." required></textarea>
@@ -189,3 +220,29 @@ $mensagens = $stmtMsg->get_result();
 </script>
 </body>
 </html>
+
+
+<script>
+const paraId = <?= intval($paraId) ?>;
+
+function atualizarMensagens() {
+  fetch('buscar_mensagens.php?para=' + paraId)
+    .then(res => res.text())
+    .then(html => {
+      const chatBox = document.getElementById('chat-box');
+      const estavaNoFinal = chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 50;
+
+      chatBox.innerHTML = html;
+
+      if (estavaNoFinal) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    });
+}
+
+// Atualiza a cada 3 segundos
+setInterval(atualizarMensagens, 1000);
+
+// Carrega na abertura
+atualizarMensagens();
+</script>
