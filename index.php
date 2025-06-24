@@ -79,9 +79,15 @@ $notificacao = $resNot->fetch_assoc();
       color: #fff;
       font-weight: bold;
       gap: 15px;
+      position: relative;
     }
 
-    header a, header button {
+    header span {
+      font-size: 1.1rem;
+    }
+
+    header button,
+    header a {
       color: #25d366;
       text-decoration: none;
       font-size: 14px;
@@ -94,7 +100,58 @@ $notificacao = $resNot->fetch_assoc();
       transition: background-color 0.3s;
     }
 
-    header a:hover, header button:hover {
+    header button:hover,
+    header a:hover {
+      background-color: #128c34;
+      color: #fff;
+    }
+
+    /* Botão Mensagens Privadas fixo fora do menu */
+    #btnMensagens {
+      margin-right: 10px;
+    }
+
+    /* Menu de três pontos */
+    #menuBtn {
+      background: none; 
+      border: none; 
+      color: #25d366; 
+      font-size: 24px; 
+      cursor: pointer;
+      padding: 0 8px;
+    }
+
+    #dropdownMenu {
+      display: none;
+      position: absolute;
+      right: 15px;
+      top: 56px; /* abaixo do header */
+      background-color: #202c33;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      width: 180px;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    #dropdownMenu button {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #dcf8c6;
+      padding: 12px 15px;
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #128c34;
+      transition: background-color 0.3s;
+    }
+
+    #dropdownMenu button:last-child {
+      border-bottom: none;
+    }
+
+    #dropdownMenu button:hover {
       background-color: #128c34;
       color: #fff;
     }
@@ -205,10 +262,17 @@ $notificacao = $resNot->fetch_assoc();
 <div class="whatsapp-wrapper">
   <header>
     <span>Olá, <?= htmlspecialchars($_SESSION['usuario']) ?></span>
-    
-    <div>
-      <button onclick="location.href='usuarios.php'">Mensagens Privadas</button>
-      <a href="logout.php">Sair</a>
+
+    <div style="display: flex; align-items: center; gap: 10px; position: relative;">
+      <button id="btnMensagens" onclick="location.href='usuarios.php'">Mensagens Privadas</button>
+
+      <button id="menuBtn" aria-label="Abrir menu de configurações">&#x22EE;</button>
+      <div id="dropdownMenu" role="menu" aria-hidden="true" aria-label="Menu de opções">
+        <button onclick="location.href='salas/sala.php'">📞 Realizar ligação</button>
+        <button onclick="location.href='config.php'">⚙️ Configurações</button>
+        
+        <button onclick="location.href='logout.php'">🚪 Sair</button>
+      </div>
     </div>
   </header>
 
@@ -262,6 +326,25 @@ $notificacao = $resNot->fetch_assoc();
     };
   </script>
 <?php endif; ?>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // evitar que o clique propague e feche o menu
+    const isShown = dropdownMenu.style.display === 'flex';
+    dropdownMenu.style.display = isShown ? 'none' : 'flex';
+    dropdownMenu.setAttribute('aria-hidden', isShown ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.style.display = 'none';
+      dropdownMenu.setAttribute('aria-hidden', 'true');
+    }
+  });
+</script>
 
 </body>
 </html>
